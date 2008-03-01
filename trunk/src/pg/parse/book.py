@@ -1,7 +1,7 @@
 import MySQLdb
 
 def remove_newline(s):
-    return s.replace("\n", " ")
+    return s.replace("\n", " ") 
 
 class Book(object):
     def __init__(self):
