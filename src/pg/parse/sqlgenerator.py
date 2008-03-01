@@ -13,27 +13,27 @@ def insert(statement):
     db.close
     
 
-
-root  = getRoot("/home/ghais/public_html/cgi-bin/cata.rdf")
-for etext in root.getiterator(pgterms + "etext"):
-    b = Book()
-    setID(etext, b)
-    for node in etext.getchildren():
-        if node.tag == dc + 'publisher':
-            setPublisher(node, b)
-        elif node.tag == dc + 'title':
-            setTitle(node, b)
-        elif node.tag == dc + 'creator':
-            setCreator(node, b)
-        elif node.tag == pgterms + 'friendlytitle':
-            setFriendlyTitle(node, b)
-        elif node.tag == dc + 'contributor':
-            setContributor(node, b)
-        elif node.tag == dc + 'language':
-            setLanguage(node, b)
-        elif node.tag == dc + 'subject':
-            setSubject(node, b)
-    for sql in b.sqliterator():
-        insert(sql)
+def populatedb(xml_filename):
+    root  = getRoot(xml_filename)
+    for etext in root.getiterator(pgterms + "etext"):
+        b = Book()
+        setID(etext, b)
+        for node in etext.getchildren():
+            if node.tag == dc + 'publisher':
+                setPublisher(node, b)
+            elif node.tag == dc + 'title':
+                setTitle(node, b)
+            elif node.tag == dc + 'creator':
+                setCreator(node, b)
+            elif node.tag == pgterms + 'friendlytitle':
+                setFriendlyTitle(node, b)
+            elif node.tag == dc + 'contributor':
+                setContributor(node, b)
+            elif node.tag == dc + 'language':
+                setLanguage(node, b)
+            elif node.tag == dc + 'subject':
+                setSubject(node, b)
+        for sql in b.sqliterator():
+            insert(sql)
 
     
