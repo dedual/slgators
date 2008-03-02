@@ -66,8 +66,6 @@ def handle_form():
     #This case should be considered as a reference to the default page.
     #In summary every person has a bookmark to the default starting page. This will make it easier later on to access it directly
     #any bookmarks the user has. To be discussed with nicolas
-    #New bug. Since the book has several different entries in the database we are currently returning only one bookmark.
-    #this functioanlity is not exactly correct.
     form = cgi.FieldStorage()
     fname = form.getvalue("fname")
     lname = form.getvalue("lname")
