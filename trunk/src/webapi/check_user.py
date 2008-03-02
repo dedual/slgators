@@ -39,8 +39,8 @@ def fetch_user_info(fname, lname):
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
     assert(isinstance(cursor, MySQLdb.cursors.Cursor))
-    cursor.execute("select bookmark.name, book.title, bookmark.page from book,bookmark, user where (user.fname = '" + fname + "' and user.lname = '" + lname + "' and user.bookmark_id = bookmark.id and bookmark.bookid=book.id);")
-    result = cursor.fetchone()
+    cursor.execute("select bookmark.id, bookmark.name, book.title, bookmark.page from book,bookmark, user where (user.fname = '" + fname + "' and user.lname = '" + lname + "' and user.bookmark_id = bookmark.id and bookmark.bookid=book.id) GROUP BY book.title;")
+    result = cursor.fetchall()
     db.close()
     return result
 
@@ -76,7 +76,8 @@ def handle_form():
         #Exact Details to be discussed with nicolas
         info = fetch_user_info(fname, lname)
         if info:
-            print (info[0] + "|" + info[1] + "|" + str(info[2]))
+            for row in info:
+                print str(row[0]) + "|" + str(row[1]) + "|" + str(row[2]) + "|" + str(row[3])
         else:
             print "None"
     else:
