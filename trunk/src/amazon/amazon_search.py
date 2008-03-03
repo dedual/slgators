@@ -20,7 +20,7 @@ def get_pg_books(books, page):
     pg_books = []
     for i in range((page - 1 )* 10, page * 10):
         book = books[i]
-        sqlsearch= """SELECT DISTINCT `id` FROM `book` WHERE `title` LIKE CONVERT( _utf8 '""" + MySQLdb.escape_string(book.Title) + """' USING latin1 ) COLLATE latin1_swedish_ci LIMIT 0 , 30;"""
+        sqlsearch= """SELECT DISTINCT `id` FROM `book` WHERE `title` LIKE CONVERT( _utf8 '%""" + MySQLdb.escape_string(book.Title) + """%' USING latin1 ) COLLATE latin1_swedish_ci LIMIT 0 , 30;"""
         db = connect_to_database("amazon", "root", "gitkotwg0")
         cursor = db.cursor()
         assert(isinstance(cursor, MySQLdb.cursors.Cursor))
@@ -33,9 +33,9 @@ def get_pg_books(books, page):
     return pg_books
 
 
-def group_searches(title):
+def group_searches(title, page):
     books = amazon_search(title)
-    pg_books = get_pg_books(books)
+    pg_books = get_pg_books(books, page)
     return pg_books
 
 

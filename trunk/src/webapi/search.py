@@ -22,7 +22,7 @@ def print_title():
 def handle_form():
     form = cgi.FieldStorage()
     title = form.getvalue("title")
-    page = form.getvalue('page')
+    page = int(form.getvalue('page'))
     result = amazon_search.group_searches(title, page)
     if(result):
         for title, id in result:
