@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 from pg import getbook
 
 
-#!/usr/bin/env python
+
 
 import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
@@ -27,9 +28,9 @@ def print_title():
 def handle_form():
     form = cgi.FieldStorage()
     bookid = form.getvalue("id")
-    page = form.getvalue("pagen")
+    page = int(form.getvalue("pagen"))
     f = getbook.getBook(bookid)
-    print getbook.getpage(page, f)
+    print getbook.getpage(page, f).replace("\n", "<p>")
 
 
 print_cont()

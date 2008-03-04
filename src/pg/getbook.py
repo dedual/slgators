@@ -11,12 +11,8 @@ def geturl(textid):
 
 def getBook(textid):
     url = geturl(textid)
-    if os.path.isfile('books/' + textid):
-        f = open('books/' + textid)
-    else:
-        os.system('wget -c ' + url + ' -O books/' + textid)
-        f = open('books/' + textid)
-    return f
+    f = urllib2.urlopen(url)
+    return StringIO.StringIO(f.read())
 
 
 
@@ -54,9 +50,6 @@ def getpage(pagen, f, nchars=75, nlines=10):
                             if r.match(lines[i * -1]):
                                 return lines[: i * -1]
 
-f = getBook('etext76')                            
-print getpage(2, f)
-            
 
 
 
