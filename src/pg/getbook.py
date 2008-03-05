@@ -11,7 +11,7 @@ def geturl(textid):
     return url
 
 
-def getBook(textid, path='/home/ghais/public_html/cgi-bin/books/'):
+def getBook(textid, path='/tmp/'):
     if os.path.isfile(path + textid + ".txt"):
         return (path + textid + ".txt")
     url = geturl(textid)
@@ -24,14 +24,14 @@ def getBook(textid, path='/home/ghais/public_html/cgi-bin/books/'):
 
 
 
-def getlines(f, start, end, nchars=75):
+def getlines(f, start, end, nchars=92):
     lines = ""
     pad = ''
     for i in range(start, end+1):
         line = linecache.getline(f, i).rstrip()
         line_len = len(line)
         if line_len < nchars:
-            pad = ' ' * (nchars - line_len)
+            pad = '&nbsp' * (nchars - line_len)
         pad += '|'
         lines += line + pad
     #linecache.clearcache()
@@ -39,8 +39,7 @@ def getlines(f, start, end, nchars=75):
 
 
 
-f = getBook('etext22483')
-print getlines(f, 1, 10)
+
 
 
 

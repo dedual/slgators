@@ -28,10 +28,19 @@ def print_title():
 def handle_form():
     form = cgi.FieldStorage()
     bookid = form.getvalue("id")
-    start = int(form.getvalue("start"))
-    end = int(form.getvalue("end"))
-    f = getbook.getBook(bookid)
-    print getbook.getlines(f, start, end)
+    start = form.getvalue("start")
+    end = form.getvalue("end")
+    page = form.getvalue("page")
+    if not bookid:
+        print 0
+    else:
+        if start and end:
+            continue
+        elif page:
+            start = (page - 1)* 58 + 1
+            end = ((page - 1) * 58 +1) + 57
+        f = getbook.getBook(bookid)
+        print getbook.getlines(f, start, end)
 
 
 print_cont()
