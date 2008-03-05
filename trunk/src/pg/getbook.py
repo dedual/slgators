@@ -1,7 +1,9 @@
 import re
 import urllib2
-import StringIO
+import cStringIO
 import os
+import linecache 
+
 def geturl(textid):
     r = re.compile('(\d+)')
     match = r.search(textid)
@@ -9,46 +11,36 @@ def geturl(textid):
     return url
 
 
-def getBook(textid):
+def getBook(textid, path='/home/ghais/public_html/cgi-bin/books/'):
+    if os.path.isfile(path + textid + ".txt"):
+        return (path + textid + ".txt")
     url = geturl(textid)
-    f = urllib2.urlopen(url)
-    return StringIO.StringIO(f.read())
+    o = urllib2.urlopen(url)
+    f = open(path + textid + ".txt", 'w')
+    f.write(o.read())
+    f.close()
+    
+    return (path + textid + ".txt")
 
 
 
-def getpage(pagen, f, nchars=75, nlines=10):
-    r = re.compile('\s')
-    if pagen == 1:
-        lines = f.read(nchars * nlines)
-        if r.match(lines[-1]):
-            return lines
-        else:
-            for i in range(nchars):
-                if r.match(lines[i * -1]):
-                    return lines[: i * -1]
-    else:
-        f.seek(nchars * nlines * (pagen - 1))
-        c = f.read(1)
-        if r.match(c):
-            lines  = f.read(nchars * nlines)
-            if r.match(lines[-1]):
-                return lines
-            else:
-                for i in range(1, nchars):
-                    if r.match(lines[i * -1]):
-                        return lines[: i * -1]
-        else:
-            current = f.tell()
-            for i in range(nchars):
-                f.seek(current - i)
-                if r.match(f.read(1)):
-                    lines  = f.read(nchars * nlines)
-                    if r.match(lines[-1]):
-                        return lines
-                    else:
-                        for i in range(nchars):
-                            if r.match(lines[i * -1]):
-                                return lines[: i * -1]
+def getlines(f, start, end, nchars=75):
+    lines = ""
+    pad = ''
+    for i in range(start, end+1):
+        line = linecache.getline(f, i).rstrip()
+        line_len = len(line)
+        if line_len < nchars:
+            pad = ' ' * (nchars - line_len)
+        pad += '|'
+        lines += line + pad
+    #linecache.clearcache()
+    return lines
+
+
+
+f = getBook('etext22483')
+print getlines(f, 1, 10)
 
 
 
