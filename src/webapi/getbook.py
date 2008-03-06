@@ -22,7 +22,6 @@ def print_title():
     <body>
 
     """
-    
 
 
 def handle_form():
