@@ -35,12 +35,13 @@ def handle_form():
         print 0
     else:
         if start and end:
-            continue
+            pass
         elif page:
+            page = int(page)
             start = (page - 1)* 58 + 1
             end = ((page - 1) * 58 +1) + 57
         f = getbook.getBook(bookid)
-        print getbook.getlines(f, start, end)
+        print getbook.getlines(f, int(start), int(end))
 
 
 print_cont()
