@@ -27,9 +27,10 @@ def get_pg_books(books, page):
         cursor.execute(sqlsearch)
         result = cursor.fetchone()
         if result:
-            pg_books.append( (book.Title, result))
+            pg_books.append( (book.Title, result, book.ASIN))
+            cursor.execute("UPDATE `amazon`.`book` SET `ASIN` = '" + MySQLdb.escape_string(book.ASIN)+"' WHERE CONVERT( `book`.`id` USING utf8 ) = '"+ MySQLdb.escape_string(result[0]) +"'" )
         else:
-            pg_books.append( (book.Title, None))            
+            pg_books.append( (book.Title, None, None))            
     return pg_books
 
 

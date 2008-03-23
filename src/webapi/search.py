@@ -25,12 +25,12 @@ def handle_form():
     page = int(form.getvalue('page'))
     result = amazon_search.group_searches(title, page)
     if(result):
-        for title, id in result:
+        for title, id, ASIN in result:
             if id:
-                print "<p>" + title + "|" + str(id[0])
+                print "<p>" + title + "|" + str(id[0]) + "|" +str(ASIN)
                 
             else:
-                print "<p>" + title + '|None'
+                print "<p>" + title + '|None' + '|None'
     else:
         print("Error")
 
