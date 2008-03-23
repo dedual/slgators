@@ -41,9 +41,11 @@ def amazon_editorial_review(ASIN):
     for review in result:
         try:
             for editorial_review in review.EditorialReviews:
-                editorials.append((editorial_review.Rating, html2txt(editorial_review.Summary), html2txt(editorial_review.Content)))
+                editorials.append((editorial_review.Source,
+                                   html2txt(editorial_review.Content)))
         except TypeError:
-            editorials.append(html2txt(review.EditorialReviews.EditorialReview.Content))
+            editorials.append((review.EditorialReviews.EditorialReview.Source,
+                               html2txt(review.EditorialReviews.EditorialReview.Content)))
     return editorials
         
 
