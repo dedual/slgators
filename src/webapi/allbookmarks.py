@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import cgi
+import cgi 
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 
