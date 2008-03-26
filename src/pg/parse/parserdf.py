@@ -19,6 +19,7 @@ base="{http://www.gutenberg.org/feeds/catalog.rdf}"
 
 
 
+
 def getRoot(filename):
     parser = ET.parse(open(filename, 'r'))
     root  = parser.getroot()
@@ -63,29 +64,36 @@ def setContributor(node, b):
     if node.getchildren():
         for contributor in node.getiterator(rdf + 'li'):
             if contributor.text:
-                b.addContributor(contributor.text.encode('utf_8', 'replace'))
+                b.addContributor(contributor.text.encode('latin-1', 'replace'))
     elif node.text:
-        b.addContributor(node.text.encode('utf_8', 'replace'))
+        b.addContributor(node.text.encode('latin-1', 'replace'))
         
 def setLanguage(node, b):
     if node.getiterator(rdf + 'li'):
         for language in node.getiterator(rdf + 'li'):
             for value in language.getiterator(rdf + 'value'):
                 if value.text:
-                    b.addLanguage(value.text.encode('utf_8', 'replace'))
+                    b.addLanguage(value.text.encode('latin-1', 'replace'))
     else:
         for value in node.getiterator(rdf + 'value'):
             if value.text:
-                b.addLanguage(value.text.encode('utf_8', 'replace'))
+                b.addLanguage(value.text.encode('latin-1', 'replace'))
 
 def setSubject(node, b):
     if node.getiterator(rdf + 'li'):
         for subject in node.getiterator(rdf + 'li'):
             for value in subject.getiterator(rdf + 'value'):
                 if value.text:
-                    b.addSubject(value.text.encode('utf_8', 'replace'))
+                    b.addSubject(value.text.encode('latin-1', 'replace'))
     else:
         for value in node.getiterator(rdf + 'value'):
             if value.text:
-                b.addSubject(value.text.encode('utf_8', 'replace'))
+                b.addSubject(value.text.encode('latin-1', 'replace'))
+                
+def has_type(node, b):
+    for type in node.getiterator(rdf + "value"):
+        if type.text:
+            return False
+    return True
+    
 

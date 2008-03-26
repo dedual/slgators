@@ -13,7 +13,9 @@ class Book(object):
         self._contributor = ['NULL']
         self._subject = ['NULL']
         self._publisher = "NULL"
+        self._translator = ['NULL']
         self._isbn = 000000000
+        self.switch = True
     
     def getISBN(self):
         return self._isbn
@@ -69,6 +71,18 @@ class Book(object):
             self._creator[0] = creator
         else:
             self._creator.append(creator)
+    
+    def getTranslator(self):
+        return self._translator
+
+    def setTranslator(self, translator):
+        self._translator = translator
+    
+    def addTranslator(self, translator):
+        if self._translator[0] == 'NULL':
+            self._translator[0] = translator
+        else:
+            self._translator.append(translator)
     
     def getContributor(self):
         return self._contributor
@@ -159,16 +173,17 @@ class Book(object):
         isbn = self.getISBN()
         pub = self.getPublisher()
         result = ""
-        for title in self.getTitle():
-            for ftitle in self.getFriendlyTitle():
-                for creator in self.getCreator():
-                    for contrib in self.getContributor():
-                        for lang in self.getLanguage():
-                            for sub in self.getSubject():
-                                result = result + header
-                                result = result + "'" + id                             + "'," + str(isbn)  + ","
-                                result = result + "'" + MySQLdb.escape_string(remove_newline(title))   + "'," + "'" + MySQLdb.escape_string(remove_newline(ftitle))     + "'," 
-                                result = result + "'" + MySQLdb.escape_string(remove_newline(creator)) + "'," + "'" + MySQLdb.escape_string(remove_newline(contrib))    + "'," 
-                                result = result + "'" + MySQLdb.escape_string(remove_newline(lang))    + "'," + "'" + MySQLdb.escape_string(remove_newline(sub))        + "'," + "'" + MySQLdb.escape_string(remove_newline(pub)) + "'" 
-                                result = result + tail
-                                yield result
+        if self.switch:
+            for title in self.getTitle():
+                for ftitle in self.getFriendlyTitle():
+                    for creator in self.getCreator():
+                        for contrib in self.getContributor():
+                            for lang in self.getLanguage():
+                                for sub in self.getSubject():
+                                    result = result + header
+                                    result = result + "'" + id                             + "'," + str(isbn)  + ","
+                                    result = result + "'" + MySQLdb.escape_string(remove_newline(title))   + "'," + "'" + MySQLdb.escape_string(remove_newline(ftitle))     + "'," 
+                                    result = result + "'" + MySQLdb.escape_string(remove_newline(creator)) + "'," + "'" + MySQLdb.escape_string(remove_newline(contrib))    + "'," 
+                                    result = result + "'" + MySQLdb.escape_string(remove_newline(lang))    + "'," + "'" + MySQLdb.escape_string(remove_newline(sub))        + "'," + "'" + MySQLdb.escape_string(remove_newline(pub)) + "'" 
+                                    result = result + tail
+                                    yield result
