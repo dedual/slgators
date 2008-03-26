@@ -11,14 +11,37 @@ def geturl(textid):
     return url
 
 
+def get_alternate_url(textid):
+    r = re.compile('(\d+)')
+    match = r.search(textid)
+    url = "http://www.gutenberg.org/etext/" + match.group()
+    return url
+
 def getBook(textid, path='/tmp/'):
     if os.path.isfile(path + textid + ".txt"):
         return (path + textid + ".txt")
     url = geturl(textid)
-    o = urllib2.urlopen(url)
-    f = open(path + textid + ".txt", 'w')
-    f.write(o.read())
-    f.close()
+    try:
+        o = urllib2.urlopen(url)
+        f = open(path + textid + ".txt", 'w')
+        f.write(o.read())
+        f.close()
+    except urllib2.HTTPError:
+        url = get_alternate_url(textid)
+        pattern = '<a href="/dirs/(.*)\.txt" title="Download from ibiblio.org.">'
+        p = re.compile(pattern)
+        href_pattern = '<a href="(.*)" (.*)'
+        p2 = re.compile(href_pattern)
+        
+        u = urllib2.urlopen(url)
+        string = u.read()
+        m= p.search(string)
+        href =  m.group()
+        print url + p2.search(href).group(1)
+        o = urllib2.urlopen("http://www.gutenberg.org" + p2.search(href).group(1))
+        f = open(path + textid + ".txt", 'w')
+        f.write(o.read())
+        f.close()
     
     return (path + textid + ".txt")
 
@@ -31,17 +54,13 @@ def getlines(f, start, end, nchars=92):
         line = linecache.getline(f, i).rstrip()
         line_len = len(line)
         if line_len < nchars:
-            pad = '&nbsp' * (nchars - line_len)
+            pad = ' ' * (nchars - line_len)
         pad += '|'
         lines += line + pad
     #linecache.clearcache()
     return lines
 
 
-
-
-
-
-
+getBook("etext12")
 
 
