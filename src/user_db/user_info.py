@@ -1,3 +1,6 @@
+from _mysql_exceptions import MySQLError
+from _mysql_exceptions import MySQLError
+import MySQLdb
 import MySQLdb
 
 def connect_to_database(databasename, usr, password):
@@ -53,4 +56,29 @@ def add_user(fname, lname):
         VALUES ('""" + fname + "', '" + lname + """', 'en'
         );""")
         db.close()
+        
+        
+def add_bookmark(fname, lname,  bookmarkname, bookid, page):
+    sql_query = """INSERT INTO `amazon`.`bookmark` (
+    `id` ,
+    `fname` ,
+    `lname` ,
+    `name` ,
+    `bookid` ,
+    `page` ,
+    `misc`
+    )
+    VALUES (
+            NULL , '""" + fname + """', '""" + lname + """', '""" + bookmarkname + """', '""" + bookid +"""', '""" +page + """', NULL
+            );"""
+    db = connect_to_database("amazon", "root", "gitkotwg0")
+    cursor = db.cursor()
+    assert(isinstance(cursor, MySQLdb.cursors.Cursor))
+    try:
+        cursor.execute(sql_query)
+        db.close()
+        print 1
+    except MySQLError:
+        print 0
+    
     
