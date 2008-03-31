@@ -1,6 +1,4 @@
 from _mysql_exceptions import MySQLError
-from _mysql_exceptions import MySQLError
-import MySQLdb
 import MySQLdb
 
 def connect_to_database(databasename, usr, password):
@@ -101,6 +99,3 @@ def fetch_all_bookmarks(fname, lname, page = -1):
         result = cursor.fetchall()
         db.close()
         return result
-
-
-    
