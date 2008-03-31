@@ -3,6 +3,7 @@ import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 from amazon import amazon_review
+from pyaws import ecs
 
 def print_cont():
     print "Content-type: text/html"
@@ -23,6 +24,41 @@ def connect_to_database(databasename, usr, password):
     return db
 
 
+def reverse_contrib(contributor):
+    contributor = contributor.split(",")
+    contributor[2] = contributor[2].split()[-1]
+    contributor.reverse()
+    return [x.strip() for x in contributor]
+
+def correct_contrib(contributor):
+    contributor = reverse_contrib(contributor)
+    contributor[1] += ' '
+    contributor = "".join(contributor[1:])
+    return contributor
+
+def get_ASIN(etextid):
+    sql_query = """SELECT DISTINCT title, creator, contributor
+     FROM book
+     WHERE id = '""" + etextid + "';"
+    db = connect_to_database("amazon", "root", "gitkotwg0")
+    cursor = db.cursor()
+    cursor.execute(sql_query)
+    results = cursor.fetchall()
+    for title, creator, contributor in results:
+        if contributor != 'NULL':
+            ecs.setLicenseKey('0ZW74MMABE2VX9H26182')
+            try:
+                books = ecs.ItemSearch(Keywords = correct_contrib(contributor) + ' ' + title,SearchIndex='Books', Sort='relevancerank')
+                return books[0].ASIN
+            except KeyError:
+                print "KEYERROR"
+        else:
+            try:
+                books = ecs.ItemSearch(title,SearchIndex='Books', Sort='relevancerank')
+                return books[0].ASIN
+            except KeyError:
+                return "KeyError"
+            
 def handle_form():
     form = cgi.FieldStorage()
     db = connect_to_database("amazon", "root", "gitkotwg0")
@@ -34,15 +70,9 @@ def handle_form():
     if ASIN:
         pass
     elif bookid:
-        sqlQuery = """ SELECT DISTINCT `ASIN`
-        FROM `book`
-        WHERE `id` = CONVERT( _utf8 '""" + bookid +"""'
-        USING latin1 )
-        COLLATE latin1_swedish_ci
-        LIMIT 0 , 30 
-        """
-        cursor.execute(sqlQuery)
-        ASIN = cursor.fetchone()[0]
+        ASIN = get_ASIN(bookid)
+        
+    print ASIN
         
     try:
         editorial = int(form.getvalue('editorial'))
@@ -80,8 +110,8 @@ def handle_form():
         for image in amazon_review.amazon_get_image(ASIN):
             print image + "<p>"
                     
+ 
+print get_ASIN("etext2600")
                     
-
-print_cont()
-print_title()
-handle_form()
+#print_cont()
+#handle_form()
