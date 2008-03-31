@@ -44,7 +44,8 @@ def get_ASIN(etextid):
                 return "None"
         else:
             try:
-                books = ecs.ItemSearch(title,SearchIndex='Books', Sort='relevancerank')
+                ecs.setLicenseKey('0ZW74MMABE2VX9H26182')
+                books = ecs.ItemSearch(Keywords = title, SearchIndex='Books', Sort='relevancerank')
                 return books[0].ASIN
             except KeyError:
                 return "None"
