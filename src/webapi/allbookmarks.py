@@ -22,10 +22,10 @@ def handle_form():
     form = cgi.FieldStorage()
     fname = form.getvalue("fname")
     lname = form.getvalue("lname")
-    page = int(form.getvalue("page")) 
+    page = form.getvalue("page") 
     if page:
         result = ""
-        for row in user_info.fetch_all_bookmarks(fname, lname, page):
+        for row in user_info.fetch_all_bookmarks(fname, lname, int(page)):
             str_row = [str(x) for x in row]
             print "|".join(str_row)
             """
