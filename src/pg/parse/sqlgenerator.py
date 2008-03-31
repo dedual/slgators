@@ -1,5 +1,4 @@
 from parserdf import *
-from hwtest import contrib
 import MySQLdb
 import re
 

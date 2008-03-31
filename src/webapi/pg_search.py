@@ -3,7 +3,7 @@
 import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
-from amazon import amazon_search
+#from amazon import amazon_search
 
 
 def unique(s):
@@ -151,7 +151,6 @@ def handle_form():
 #        
         output += "<p>"
     print output
-        
         
 print_cont()
 handle_form()

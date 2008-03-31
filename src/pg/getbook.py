@@ -57,10 +57,9 @@ def getlines(f, start, end, nchars=92):
             pad = ' ' * (nchars - line_len)
         pad += '|'
         lines += line + pad
-    #linecache.clearcache()
     return lines
 
 
-getBook("etext12")
+
 
 
