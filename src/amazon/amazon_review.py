@@ -75,7 +75,8 @@ def amazon_similarities(ASIN):
     return similarities
 
 
-a = amazon_similarities("0307266931")
+a = amazon_get_image("0307266931")
+print a
 #for item in a:
 #    print item 
     

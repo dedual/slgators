@@ -3,6 +3,7 @@
 import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
+from amazon import amazon_search
 
 
 def unique(s):
@@ -139,15 +140,15 @@ def handle_form():
     books = pg_search(title, page)
     output = ""
     for book_id in  books.keys():
-        output += book_id + "|" + books[book_id]['title'] + "|"
-        
-        for creator in books[book_id]['creator']:
-            output += creator + ","
-        output = output[:-1]
-        output += "|"
-        for contrib in books[book_id]['contributor']:
-            output += contrib + ","
-            output = output[:-1]
+        output += books[book_id]['title'] + "|" + book_id + "|" +  amazon_search.get_ASIN(book_id)
+#        for creator in books[book_id]['creator']:
+#            output += creator + ","
+#        output = output[:-1]
+#        output += "|"
+#        for contrib in books[book_id]['contributor']:
+#            output += contrib + ","
+#            output = output[:-1]
+#        
         output += "<p>"
     print output
         
