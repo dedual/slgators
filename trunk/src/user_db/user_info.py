@@ -7,8 +7,7 @@ def connect_to_database(databasename, usr, password):
     return db
 
 def check_usr(fname, lname):
-    """Given a first name and a last name, it checks weather the user exists in the database
-    If not it returns Null otherwise it returns (fname, lname) as fetche from the database"""
+    """Given a first name and a last name, it checks weather the user exists in the database"""
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
     assert(isinstance(cursor, MySQLdb.cursors.Cursor))
@@ -20,19 +19,24 @@ def check_usr(fname, lname):
     else:
         return False
 
-
-
-def fetch_user_bookmarks(fname, lname):
+def fetch_user_bookmarks(fname, lname, bookid = None):
     """Given a first name, and a last name it returns the tupple containing bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page from the database"""
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
-
-    sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
-    FROM book, bookmark
-    WHERE bookmark.fname = '""" + fname + """'
-    AND bookmark.lname = '"""   + lname + """'
-    AND bookmark.bookid = book.id;""")
-    
+    sql_query = ""
+    if bookid:
+        sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+        FROM book, bookmark
+        WHERE bookmark.fname = '""" + fname + """'
+        AND bookmark.lname = '"""   + lname + """'
+        AND bookmark.bookid = '""" + bookid + """';""")
+    else:
+        sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+        FROM book, bookmark
+        WHERE bookmark.fname = '""" + fname + """'
+        AND bookmark.lname = '"""   + lname + """'
+        AND bookmark.bookid = book.id;""")
+        
     cursor.execute(sql_query)
     result = cursor.fetchall()
     db.close()
@@ -80,21 +84,28 @@ def add_bookmark(fname, lname,  bookmarkname, bookid, page):
         print 0
 
 
-def fetch_all_bookmarks(fname, lname, page = -1):
+def fetch_all_bookmarks(fname, lname, bookid = None, page = -1):
     if page == -1:
-        return fetch_user_bookmarks(fname, lname)
+        return fetch_user_bookmarks(fname, lname, bookid)
     else:
         start = (page - 1) * 25
         end = page * 25
         db = connect_to_database("amazon", "root", "gitkotwg0")
         cursor = db.cursor()
-    
-        sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
-        FROM book, bookmark
-        WHERE bookmark.fname = '""" + fname + """'
-        AND bookmark.lname = '"""   + lname + """'
-        AND bookmark.bookid = book.id LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
-        
+        sql_query = ""
+        if bookid:
+            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            FROM book, bookmark
+            WHERE bookmark.fname = '""" + fname + """'
+            AND bookmark.lname = '"""   + lname + """'
+            AND bookmark.bookid = '""" + bookid + """' LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
+        else:
+            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            FROM book, bookmark
+            WHERE bookmark.fname = '""" + fname + """'
+            AND bookmark.lname = '"""   + lname + """'
+            AND bookmark.bookid = book.id LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
+            
         cursor.execute(sql_query)
         result = cursor.fetchall()
         db.close()

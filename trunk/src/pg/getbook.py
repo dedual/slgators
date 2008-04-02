@@ -2,7 +2,10 @@ import re
 import urllib2
 import cStringIO
 import os
-import linecache 
+import linecache
+import random;
+import sys;
+
 
 def geturl(textid):
     r = re.compile('(\d+)')
@@ -60,6 +63,10 @@ def getlines(f, start, end, nchars=92):
     return lines
 
 
+def get_markov(textid, path='/tmp/'):
+    file = getBook(textid, path)
+    if os.path.isfile(path + textid + ".txt.markov"):
+        pass
 
 
 

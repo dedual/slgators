@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import cgi
-import cgitb; cgitb.enable()  # for troubleshooting
+#import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
-#from amazon import amazon_search
+from amazon import amazon_search
 
 
 def unique(s):
@@ -84,8 +84,8 @@ def connect_to_database(databasename, usr, password):
 
 
 def pg_search(title, page):
-    start = str((page - 1) * 25) 
-    end =  str(page * 25)
+    start = str((page - 1) * 10) 
+    end =  str(page * 10)
     sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
     FROM `book`
     WHERE MATCH (
@@ -135,12 +135,14 @@ def print_title():
     
 def handle_form():
     form = cgi.FieldStorage()
-    title = form.getvalue("title")
-    page = int(form.getvalue('page'))
+    title = "Alice in wonderland" #form.getvalue("title")
+    page = 1 #int(form.getvalue('page'))
     books = pg_search(title, page)
     output = ""
     for book_id in  books.keys():
-        output += books[book_id]['title'] + "|" + book_id + "|" +  amazon_search.get_ASIN(book_id)
+        asin = amazon_search.get_ASIN(book_id)
+        
+        print books[book_id]['title'] + "|" + book_id + "|" +  asin + "<p>"
 #        for creator in books[book_id]['creator']:
 #            output += creator + ","
 #        output = output[:-1]
@@ -149,8 +151,6 @@ def handle_form():
 #            output += contrib + ","
 #            output = output[:-1]
 #        
-        output += "<p>"
-    print output
-        
-print_cont()
+#print_cont()
 handle_form()
+#print pg_search("Alice in wonderland", 1);
