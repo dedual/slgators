@@ -51,6 +51,8 @@ def get_ASIN(etextid):
                 return "None"
             except ecs.AWSException:
                 return "None"
+            except TypeError:
+                return "None"
             
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import cgi
-#import cgitb; cgitb.enable()  # for troubleshooting
+import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 from amazon import amazon_search
 
@@ -143,14 +143,6 @@ def handle_form():
         asin = amazon_search.get_ASIN(book_id)
         
         print books[book_id]['title'] + "|" + book_id + "|" +  asin + "<p>"
-#        for creator in books[book_id]['creator']:
-#            output += creator + ","
-#        output = output[:-1]
-#        output += "|"
-#        for contrib in books[book_id]['contributor']:
-#            output += contrib + ","
-#            output = output[:-1]
-#        
-#print_cont()
+        
+print_cont()
 handle_form()
-#print pg_search("Alice in wonderland", 1);
