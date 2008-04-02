@@ -12,7 +12,7 @@ def unique(s):
     For example, unique([1,2,3,1,2,3]) is some permutation of [1,2,3],
     unique("abcabc") some permutation of ["a", "b", "c"], and
     unique(([1, 2], [2, 3], [1, 2])) some permutation of
-    [[2, 3], [1, 2]].
+    [[2, 3], [1, 2]].page
 
     For best speed, all sequence elements should be hashable.  Then
     unique() will usually work in linear time.
@@ -85,7 +85,7 @@ def connect_to_database(databasename, usr, password):
 
 def pg_search(title, page):
     start = str((page - 1) * 10) 
-    end =  str(page * 10)
+    end =  str(10)
     sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
     FROM `book`
     WHERE MATCH (
@@ -93,7 +93,7 @@ def pg_search(title, page):
     )
     AGAINST (
     '""" + MySQLdb.escape_string(title) + """'
-    ) LIMIT """ + start + ',' + end + ';'
+    ) LIMIT """ + start + ', ' + end + ';'
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
     cursor.execute(sqlquery)
@@ -135,8 +135,8 @@ def print_title():
     
 def handle_form():
     form = cgi.FieldStorage()
-    title = "Alice in wonderland" #form.getvalue("title")
-    page = 1 #int(form.getvalue('page'))
+    title = form.getvalue("title")
+    page = int(form.getvalue('page'))
     books = pg_search(title, page)
     output = ""
     for book_id in  books.keys():
@@ -146,3 +146,4 @@ def handle_form():
         
 print_cont()
 handle_form()
+#pg_search("Alice in Wonderland", 3)
