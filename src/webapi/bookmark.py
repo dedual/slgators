@@ -3,6 +3,8 @@ import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 from user_db import user_info
+
+
 def print_cont():
     print "Content-type: text/html"
     print
@@ -16,8 +18,6 @@ def print_title():
     <body>
 
     """
-
-    
   
 def handle_form():
     form = cgi.FieldStorage()
@@ -27,9 +27,6 @@ def handle_form():
     page = form.getvalue("page")
     name = form.getvalue("name")
     result = user_info.add_bookmark(fname, lname, name, bookid, str(page))
-        
-        
-
 
 print_cont()
 #print_title()

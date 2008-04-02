@@ -22,7 +22,7 @@ def correct_contrib(contributor):
     contributor = reverse_contrib(contributor)
     contributor[1] += ' '
     contributor = "".join(contributor[1:])
-    print contributor
+    #print contributor
     return  contributor
 
 def get_ASIN(etextid):
@@ -34,7 +34,7 @@ def get_ASIN(etextid):
     cursor = db.cursor()
     cursor.execute(sql_query)
     results = cursor.fetchall()
-    for title, creator, contributor in results:
+    for title, creator, contributor in results: 
         if contributor != 'NULL':
             ecs.setLicenseKey('0ZW74MMABE2VX9H26182')
             try:
@@ -49,5 +49,8 @@ def get_ASIN(etextid):
                 return books[0].ASIN
             except KeyError:
                 return "None"
+            except ecs.AWSException:
+                return "None"
+            
 
 
