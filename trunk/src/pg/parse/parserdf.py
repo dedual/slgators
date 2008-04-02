@@ -29,34 +29,34 @@ def setID(etext, b):
     b.setID(etext.get(rdf + 'ID'))
 
 def setPublisher(node, b):
-    b.setPublisher(node.text.encode('utf_8', 'replace'))
+    b.setPublisher(node.text.encode('latin-1', 'replace'))
 
 
 def setTitle(node, b):
     if node.getchildren():
         for title in node.getiterator(rdf + 'li'):
             if title.text:
-                b.addTitle(title.text.encode('utf_8', 'replace'))
+                b.addTitle(title.text.encode('latin-1', 'replace'))
     elif node.text:
-        b.addTitle(node.text.encode('utf_8', 'replace'))
+        b.addTitle(node.text.encode('latin-1', 'replace'))
 
 
 def setCreator(node, b):
     if node.getchildren():
         for creator in node.getiterator(rdf + 'li'):
             if creator.text:
-                b.addCreator(creator.text.encode('utf_8', 'replace'))
+                b.addCreator(creator.text.encode('latin-1', 'replace'))
     elif node.text:
-        b.addCreator(node.text.encode('utf_8', 'replace'))
+        b.addCreator(node.text.encode('latin-1', 'replace'))
         
         
 def setFriendlyTitle(node, b):
     if node.getchildren():
         for ftitle in node.getiterator(rdf + 'li'):
             if ftitle.text:
-                b.addFriendlyTitl(ftitle.text.encode('utf_8', 'replace'))
+                b.addFriendlyTitl(ftitle.text.encode('latin-1', 'replace'))
     elif node.text:
-        b.addFriendlyTitle(node.text.encode('utf_8', 'replace'))
+        b.addFriendlyTitle(node.text.encode('latin-1', 'replace'))
     
     
 
