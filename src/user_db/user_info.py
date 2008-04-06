@@ -27,20 +27,50 @@ def fetch_user_bookmarks(fname, lname, bookid = None):
     if bookid:
         sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
         FROM book, bookmark
-        WHERE bookmark.fname = '""" + fname + """'
-        AND bookmark.lname = '"""   + lname + """'
-        AND bookmark.bookid = '""" + bookid + """';""")
+        WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
+        AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
+        AND bookmark.bookid = '""" + MySQLdb.escape_string(bookid) + """'
+        AND bookmark.bookid = book.id;""")
     else:
         sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
         FROM book, bookmark
-        WHERE bookmark.fname = '""" + fname + """'
-        AND bookmark.lname = '"""   + lname + """'
+        WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
+        AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
         AND bookmark.bookid = book.id;""")
         
     cursor.execute(sql_query)
     result = cursor.fetchall()
     db.close()
     return result
+
+def fetch_all_bookmarks(fname, lname, bookid = None, page = None):
+    if page:
+        start = (page - 1) * 25
+        end = 25
+        db = connect_to_database("amazon", "root", "gitkotwg0")
+        cursor = db.cursor()
+        sql_query = ""
+        if bookid:
+            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            FROM book, bookmark
+            WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
+            AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
+            AND bookmark.bookid = '""" + MySQLdb.escape_string(bookid) + """' 
+            AND bookmark.bookid = book.id LIMIT """ + MySQLdb.escape_string(str(start)) + """,""" + MySQLdb.escape_string(str(end)) + """ ;""")
+        else:
+            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            FROM book, bookmark
+            WHERE bookmark.fname = '""" + fname + """'
+            AND bookmark.lname = '"""   + lname + """'
+            AND bookmark.bookid = book.id LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
+            
+        cursor.execute(sql_query)
+        result = cursor.fetchall()
+        db.close()
+        return result
+    else:
+        return fetch_user_bookmarks(fname, lname, bookid)
+
 
 def add_user(fname, lname):
     """Given a first name and a last name, this functions inserts a new user into the database and associates him with the empty bookmark"""
@@ -55,58 +85,37 @@ def add_user(fname, lname):
         `lname` ,
         `languag`
         ) 
-        VALUES ('""" + fname + "', '" + lname + """', 'en'
+        VALUES ('""" + MySQLdb.escape_string(fname) + "', '" + MySQLdb.escape_string(lname) + """', 'en'
         );""")
         db.close()
         
         
 def add_bookmark(fname, lname,  bookmarkname, bookid, page):
-    sql_query = """INSERT INTO `amazon`.`bookmark` (
-    `id` ,
-    `fname` ,
-    `lname` ,
-    `name` ,
-    `bookid` ,
-    `page` ,
-    `misc`
-    )
-    VALUES (
-            NULL , '""" + fname + """', '""" + lname + """', '""" + bookmarkname + """', '""" + bookid +"""', '""" +page + """', NULL
-            );"""
-    db = connect_to_database("amazon", "root", "gitkotwg0")
-    cursor = db.cursor()
-    assert(isinstance(cursor, MySQLdb.cursors.Cursor))
-    try:
-        cursor.execute(sql_query)
-        db.close()
-        print 1
-    except MySQLError:
-        print 0
-
-
-def fetch_all_bookmarks(fname, lname, bookid = None, page = -1):
-    if page == -1:
-        return fetch_user_bookmarks(fname, lname, bookid)
-    else:
-        start = (page - 1) * 25
-        end = page * 25
+    
+    if check_usr(fname, lname):
+        sql_query = """INSERT INTO `amazon`.`bookmark` (
+        `id` ,
+        `fname` ,
+        `lname` ,
+        `name` ,
+        `bookid` ,
+        `page` ,
+        `misc`
+        )
+        VALUES (
+                NULL , '""" + MySQLdb.escape_string(fname) + """', '""" + MySQLdb.escape_string(lname) + """', '""" + MySQLdb.escape_string(bookmarkname) + """', '""" + MySQLdb.escape_string(bookid) +"""', '""" + MySQLdb.escape_string(page) + """', NULL
+                );"""
         db = connect_to_database("amazon", "root", "gitkotwg0")
         cursor = db.cursor()
-        sql_query = ""
-        if bookid:
-            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
-            FROM book, bookmark
-            WHERE bookmark.fname = '""" + fname + """'
-            AND bookmark.lname = '"""   + lname + """'
-            AND bookmark.bookid = '""" + bookid + """' LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
-        else:
-            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
-            FROM book, bookmark
-            WHERE bookmark.fname = '""" + fname + """'
-            AND bookmark.lname = '"""   + lname + """'
-            AND bookmark.bookid = book.id LIMIT """ + str(start) + """,""" + str(end) + """ ;""")
-            
-        cursor.execute(sql_query)
-        result = cursor.fetchall()
-        db.close()
-        return result
+        assert(isinstance(cursor, MySQLdb.cursors.Cursor))
+        try:
+            cursor.execute(sql_query)
+            db.close()
+            print 1
+        except MySQLError:
+            print "MySQL error"        #indicates mysql error
+    else:
+        print "User doesn't exist"     #indicates user doesn't exist
+
+
+

@@ -111,7 +111,7 @@ def handle_form():
             print image + "<p>"
                     
  
-print get_ASIN("etext2600")
+#print get_ASIN("etext2600")
                     
-#print_cont()
-#handle_form()
+print_cont()
+handle_form()

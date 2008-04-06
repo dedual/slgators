@@ -1,5 +1,4 @@
 from pyaws import ecs
-from _xmlplus.dom import html
 import re
 
 license_key = '0ZW74MMABE2VX9H26182'
@@ -60,7 +59,10 @@ def amazon_get_image(ASIN, size="LargeImage"):
     ecs.setLicenseKey(license_key)
     result = ecs.ItemLookup(ASIN, ResponseGroup = "Images")
     for item in result:
-        images.append(item.LargeImage.URL)
+        try:
+            images.append(item.LargeImage.URL)
+        except AttributeError:
+            images.append("None")
     return images
         
         
@@ -75,8 +77,6 @@ def amazon_similarities(ASIN):
     return similarities
 
 
-a = amazon_get_image("0307266931")
-print a
-#for item in a:
-#    print item 
+print amazon_get_image("B000HF9G9O")
+
     

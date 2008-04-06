@@ -84,6 +84,8 @@ def connect_to_database(databasename, usr, password):
 
 
 def pg_search(title, page):
+    if page < 0:
+        return {}
     start = str((page - 1) * 10) 
     end =  str(10)
     sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
@@ -113,6 +115,7 @@ def pg_search(title, page):
                 books[id]['creator'].append(creator)
             if contributor:
                 books[id]['contributor'].append(contributor)
+    db.close()
         
     return books
 
