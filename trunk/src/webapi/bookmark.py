@@ -25,8 +25,8 @@ def handle_form():
     lname = form.getvalue("lname")
     bookid = form.getvalue("bookid")
     page = form.getvalue("page")
-    name = form.getvalue("name")
-    result = user_info.add_bookmark(fname, lname, name, bookid, str(page))
+    bookmark_name = form.getvalue("bookmarkname")
+    result = user_info.add_bookmark(fname, lname, bookmark_name, bookid, str(page))
 
 print_cont()
 #print_title()
