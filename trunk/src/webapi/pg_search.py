@@ -100,6 +100,7 @@ def pg_search(title, page):
     cursor = db.cursor()
     cursor.execute(sqlquery)
     result = cursor.fetchall()
+    db.close()
     books = {}
     for id, title, creator, contributor in result:
         if books.has_key(id):

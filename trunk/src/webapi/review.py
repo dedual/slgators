@@ -44,6 +44,7 @@ def get_ASIN(etextid):
     cursor = db.cursor()
     cursor.execute(sql_query)
     results = cursor.fetchall()
+    db.close()
     for title, creator, contributor in results:
         if contributor != 'NULL':
             ecs.setLicenseKey('0ZW74MMABE2VX9H26182')
