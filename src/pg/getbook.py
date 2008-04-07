@@ -65,9 +65,12 @@ def getlines(f, start, end, nchars=92):
         line_len = len(line)
         if line_len < nchars:
             pad = ' ' * (nchars - line_len)
-        pad += '|'
-        lines += line + pad
+        pad = pad + '|'
+        lines = lines + line + pad
     return lines
+
+
+f = getBook("etext928")
 
 
 
