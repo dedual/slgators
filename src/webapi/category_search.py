@@ -100,6 +100,7 @@ def subject_search(subject, page):
     cursor = db.cursor()
     cursor.execute(sqlquery)
     result = cursor.fetchall()
+    db.close()
     books = {}
     for id, title, creator, contributor in result:
         if books.has_key(id):
@@ -141,7 +142,7 @@ def handle_form():
     subject = " +".join(subject.split())
     subject = "+" + subject
     page = int(form.getvalue('page'))
-    books = author_search(subject, page)
+    books = subject_search(subject, page)
     output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
