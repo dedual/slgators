@@ -100,7 +100,7 @@ def pg_search(title, page):
     title, friendly_title
     )
     AGAINST (
-    '""" + MySQLdb.escape_string(title) + """'
+    '""" + MySQLdb.escape_string(title) + """' IN BOOLEAN MODE
     ) LIMIT """ + start + ', ' + end + ';'
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
