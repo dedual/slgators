@@ -4,12 +4,6 @@ import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 from amazon import amazon_search
-#!/usr/bin/env python
-
-import cgi
-import cgitb; cgitb.enable()  # for troubleshooting
-import MySQLdb
-from amazon import amazon_search
 
 
 def unique(s):
@@ -89,18 +83,18 @@ def connect_to_database(databasename, usr, password):
     return db
 
 
-def pg_search(title, page):
-    if page < 0:
+def author_search(author, page):
+    if 0 > page:
         return {}
     start = str((page - 1) * 10) 
     end =  str(10)
     sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
     FROM `book`
     WHERE MATCH (
-    title, friendly_title
+    creator, contributor
     )
     AGAINST (
-    '""" + MySQLdb.escape_string(title) + """'
+    '""" + MySQLdb.escape_string(author) + """' IN BOOLEAN MODE
     ) LIMIT """ + start + ', ' + end + ';'
     db = connect_to_database("amazon", "root", "gitkotwg0")
     cursor = db.cursor()
@@ -121,7 +115,6 @@ def pg_search(title, page):
                 books[id]['creator'].append(creator)
             if contributor:
                 books[id]['contributor'].append(contributor)
-    db.close()
         
     return books
 
@@ -144,19 +137,16 @@ def print_title():
     
 def handle_form():
     form = cgi.FieldStorage()
-    title = form.getvalue("title")
+    author = form.getvalue("author")
+    author = " +".join(author.spit())
+    author = "+" + author
     page = int(form.getvalue('page'))
-    books = pg_search(title, page)
+    books = author_search(author, page)
     output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
-        
         print books[book_id]['title'] + "|" + book_id + "|" +  asin + "<p>"
+
         
 print_cont()
 handle_form()
-
-
-
-
-
