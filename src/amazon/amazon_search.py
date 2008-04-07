@@ -22,7 +22,6 @@ def correct_contrib(contributor):
     contributor = reverse_contrib(contributor)
     contributor[1] += ' '
     contributor = "".join(contributor[1:])
-    #print contributor
     return  contributor
 
 def get_ASIN(etextid):
