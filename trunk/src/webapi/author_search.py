@@ -138,7 +138,7 @@ def print_title():
 def handle_form():
     form = cgi.FieldStorage()
     author = form.getvalue("author")
-    author = " +".join(author.spit())
+    author = " +".join(author.split())
     author = "+" + author
     page = int(form.getvalue('page'))
     books = author_search(author, page)
