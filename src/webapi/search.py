@@ -94,7 +94,7 @@ def pg_search(title, page):
         return {}
     start = str((page - 1) * 10) 
     end =  str(10)
-    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
+    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `UUID`, `subject`
     FROM `book`
     WHERE MATCH (
     title, friendly_title
@@ -108,21 +108,30 @@ def pg_search(title, page):
     result = cursor.fetchall()
     db.close()
     books = {}
-    for id, title, creator, contributor in result:
+    for id, title, creator, contributor, uuid, subject in result:
         if books.has_key(id):
-            if creator:
+            if creator != 'NULL':
                 books[id]['creator'].append(creator)
-            if contributor:
+            if contributor != 'NULL':
                 books[id]['contributor'].append(contributor)
+            if uuid != 'NULL':
+                books[id]['UUID'].append(uuid)
+            if subject != 'NULL':
+                books[id]['subject'].append(subject)
             books[id]['creator'] = unique(books[id]['creator'])
             books[id]['contributor'] = unique(books[id]['contributor'])
+            books[id]['UUID'] = unique(books[id]['UUID'])
+            books[id]['subject'] = unique(books[id]['subject'])
         else:
-            books[id] = {'title': title, 'creator' : [], 'contributor' : []}
-            if creator:
+            books[id] = {'title': title, 'creator' : [], 'contributor' : [], 'UUID' : [], 'subject' : [] }
+            if creator != 'NULL':
                 books[id]['creator'].append(creator)
-            if contributor:
+            if contributor != 'NULL':
                 books[id]['contributor'].append(contributor)
-    db.close()
+            if uuid != 'NULL':
+                books[id]['UUID'].append(uuid)
+            if subject != 'NULL':
+                books[id]['subject'].append(subject)
         
     return books
 
@@ -143,7 +152,9 @@ def print_title():
 
     """
     
+
 def handle_form():
+    """etextid|title|author|contributor|UUID|subject|rankings|ASIN"""
     form = cgi.FieldStorage()
     title = form.getvalue("title")
     page = int(form.getvalue('page'))
@@ -156,7 +167,6 @@ def handle_form():
         
 print_cont()
 handle_form()
-
 
 
 
