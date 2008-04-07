@@ -51,5 +51,4 @@ def handle_form():
 
 
 print_cont()
-#print_title()
 handle_form()

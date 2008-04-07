@@ -77,6 +77,4 @@ def amazon_similarities(ASIN):
     return similarities
 
 
-print amazon_get_image("B000HF9G9O")
-
     

@@ -4,7 +4,7 @@ import MySQLdb
 
 from amazon import amazon_search
 
-def __get_top_books():
+def get_top_books():
     """Returns a list containing the ids of the top 100 books in the last 30 days as reported by PG"""
     url = "http://www.gutenberg.org/browse/scores/top"
     etextid = []
@@ -53,7 +53,7 @@ def connect_to_database(databasename, usr, password):
 
 
 def __pg_search(page):
-    etextids = __get_top_books()
+    etextids = get_top_books()
     if 0 > page:
         return {}
     start = (page - 1) * 10 
