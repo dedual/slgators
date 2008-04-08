@@ -4,6 +4,7 @@ import cgi
 import cgitb; cgitb.enable()  # for troubleshooting
 import MySQLdb
 from amazon import amazon_search
+from amazon import amazon_review
 
 
 def unique(s):
@@ -88,7 +89,7 @@ def author_search(author, page):
         return {}
     start = str((page - 1) * 10) 
     end =  str(10)
-    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
+    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `uuid`, `subject`
     FROM `book`
     WHERE MATCH (
     creator, contributor
@@ -96,26 +97,59 @@ def author_search(author, page):
     AGAINST (
     '""" + MySQLdb.escape_string(author) + """' IN BOOLEAN MODE
     ) LIMIT """ + start + ', ' + end + ';'
-    db = connect_to_database("amazon", "root", "gitkotwg0")
+    db = connect_to_database("amazon", "root", "password-here")    #replace with password
     cursor = db.cursor()
     cursor.execute(sqlquery)
     result = cursor.fetchall()
     db.close()
     books = {}
-    for id, title, creator, contributor in result:
+    for id, title, creator, contributor, uuid, subject in result:
         if books.has_key(id):
-            if creator:
+            if creator != 'NULL':
                 books[id]['creator'].append(creator)
-            if contributor:
+            else:
+                books[id]['creator'].append("None")
+                
+            if contributor != 'NULL':
                 books[id]['contributor'].append(contributor)
+            else:
+                books[id]['contributor'].append("None")                
+                
+            if uuid != 'NULL':
+                books[id]['UUID'].append(uuid)
+            else:
+                books[id]['UUID'].append("None")
+                
+            if subject != 'NULL':
+                books[id]['subject'].append(subject)
+            else:
+                books[id]['subject'].append("None")
+            
             books[id]['creator'] = unique(books[id]['creator'])
             books[id]['contributor'] = unique(books[id]['contributor'])
+            books[id]['UUID'] = unique(books[id]['UUID'])
+            books[id]['subject'] = unique(books[id]['subject'])
         else:
-            books[id] = {'title': title, 'creator' : [], 'contributor' : []}
-            if creator:
+            books[id] = {'title': title, 'creator' : [], 'contributor' : [], 'UUID' : [], 'subject' : [] }
+            if creator != 'NULL':
                 books[id]['creator'].append(creator)
-            if contributor:
+            else:
+                books[id]['creator'].append("None")
+                
+            if contributor != 'NULL':
                 books[id]['contributor'].append(contributor)
+            else:
+                books[id]['contributor'].append("None")
+                
+            if uuid != 'NULL':
+                books[id]['UUID'].append(uuid)
+            else:
+                books[id]['UUID'].append("None")
+                
+            if subject != 'NULL':
+                books[id]['subject'].append(subject)
+            else:
+                books[id]['subject'].append("None")
         
     return books
 
@@ -136,18 +170,32 @@ def print_title():
 
     """
     
+
 def handle_form():
+    """etextid|title|author|contributor|UUID|subject|rankings|ASIN"""
     form = cgi.FieldStorage()
     author = form.getvalue("author")
-    author = " +".join(author.split())
+    assert(isinstance(author, str))
+    author = "+ ".join(author.split())
     author = "+" + author
     page = int(form.getvalue('page'))
     books = author_search(author, page)
     output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
-        print books[book_id]['title'] + "|" + book_id + "|" +  asin + "<p>"
-
+        
+        print book_id + "|" +  books[book_id]['title'] + "|",
+        print "#".join(books[book_id]["creator"]) + "|",
+        print "#".join(books[book_id]["contributor"]) + "|",
+        print "#".join(books[book_id]["subject"]) + "|" ,
+        print amazon_review.avarage_rating(asin) + "|",
+        if asin:
+            print asin + "<p>"
+        else:
+            print "None <p>" 
+        
         
 print_cont()
 handle_form()
+
+

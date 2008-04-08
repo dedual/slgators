@@ -14,7 +14,7 @@ def correct_title(title):
 
 
 def convert_illustrated():
-    db = connect_to_database("amazon", "root", "gitkotwg0")
+    db = connect_to_database("amazon", "root", "password-here")    #replace with password
     cursor = db.cursor()
     cursor.execute("select id,title, friendly_title from amazon.book where title like '%The Divine Comedy by Dante, Illustrated, %';")
     result = cursor.fetchall()
