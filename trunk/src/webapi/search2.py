@@ -84,18 +84,18 @@ def connect_to_database(databasename, usr, password):
     return db
 
 
-def subject_search(subject, page):
-    if 0 > page:
+def pg_search(title, page):
+    if page < 0:
         return {}
     start = str((page - 1) * 10) 
     end =  str(10)
-    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `uuid`, `subject`
+    sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `UUID`, `subject`
     FROM `book`
     WHERE MATCH (
-    subject
+    title, friendly_title
     )
     AGAINST (
-    '""" + MySQLdb.escape_string(subject) + """'
+    '""" + MySQLdb.escape_string(title) + """'
     ) LIMIT """ + start + ', ' + end + ';'
     db = connect_to_database("amazon", "root", "password-here")    #replace with password
     cursor = db.cursor()
@@ -174,9 +174,9 @@ def print_title():
 def handle_form():
     """etextid|title|author|contributor|UUID|subject|rankings|ASIN"""
     form = cgi.FieldStorage()
-    subject = form.getvalue("subject")
+    title = form.getvalue("title")
     page = int(form.getvalue('page'))
-    books = subject_search(subject, page)
+    books = pg_search(title, page)
     output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
@@ -194,5 +194,7 @@ def handle_form():
         
 print_cont()
 handle_form()
+
+
 
 

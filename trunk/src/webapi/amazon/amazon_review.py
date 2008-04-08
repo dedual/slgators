@@ -79,12 +79,14 @@ def amazon_similarities(ASIN):
     return similarities
 
 def avarage_rating(ASIN):
-    ecs.setLicenseKey(license_key)
-    try:
-        result = ecs.ItemLookup(ASIN, ResponseGroup = "Reviews")
-        return result[0].CustomerReviews.AverageRating
-    except ecs.AWSException, e:
-        print e
-        
-
-print avarage_rating("00a0006781")
+    if ASIN:
+        ecs.setLicenseKey(license_key)
+        try:
+            result = ecs.ItemLookup(ASIN, ResponseGroup = "Reviews")
+            return result[0].CustomerReviews.AverageRating
+        except ecs.AWSException, e:
+            return "None"
+        except AttributeError, e:
+            return "None"
+    else:
+        return "None"
