@@ -29,7 +29,7 @@ def get_ASIN(etextid):
      FROM book
      WHERE id = CONVERT( _utf8 '""" + etextid + "'USING latin1) COLLATE latin1_swedish_ci;"
 
-    db = connect_to_database("amazon", "root", "gitkotwg0")
+    db = connect_to_database("amazon", "root", "password-here")           #repalce with password
     cursor = db.cursor()
     cursor.execute(sql_query)
     results = cursor.fetchall()
