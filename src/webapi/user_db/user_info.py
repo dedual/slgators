@@ -21,7 +21,7 @@ def check_usr(fname, lname):
 
 def fetch_user_bookmarks(fname, lname, bookid = None):
     """Given a first name, and a last name it returns the tupple containing bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page from the database"""
-    db = connect_to_database("amazon", "root", "password-here")    #replace with password
+    db = connect_to_database("amazon", "root", "gitkotwg0")    #replace with password
     cursor = db.cursor()
     sql_query = ""
     if bookid:

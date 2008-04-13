@@ -40,7 +40,7 @@ def get_ASIN(etextid):
     sql_query = """SELECT DISTINCT title, creator, contributor
      FROM book
      WHERE id = '""" + etextid + "';"
-    db = connect_to_database("amazon", "root", "password-here")    #repace with password
+    db = connect_to_database("amazon", "root", "gitkotwg0")    #repace with password
     cursor = db.cursor()
     cursor.execute(sql_query)
     results = cursor.fetchall()
@@ -62,7 +62,7 @@ def get_ASIN(etextid):
             
 def handle_form():
     form = cgi.FieldStorage()
-    db = connect_to_database("amazon", "root", "password-here")    #replace with password
+    db = connect_to_database("amazon", "root", "gitkotwg0")    #replace with password
     cursor = db.cursor()
     
     ASIN = form.getvalue("ASIN") 

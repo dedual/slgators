@@ -59,7 +59,7 @@ def __pg_search(page):
     start = (page - 1) * 10 
     end =  page * 10
     
-    db = connect_to_database("amazon", "root", "password-here")     #replace with password
+    db = connect_to_database("amazon", "root", "gitkotwg0")     #replace with password
     cursor = db.cursor()
     books = {}
     
