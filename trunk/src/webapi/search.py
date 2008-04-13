@@ -96,7 +96,7 @@ def pg_search(title, page):
     AGAINST (
     '""" + MySQLdb.escape_string(title) + """'
     ) LIMIT """ + start + ', ' + end + ';'
-    db = connect_to_database("amazon", "root", "password-here")    #replace with password
+    db = connect_to_database("amazon", "root", "gitkotwg0")    #replace with password
     cursor = db.cursor()
     cursor.execute(sqlquery)
     result = cursor.fetchall()
