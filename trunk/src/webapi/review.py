@@ -78,7 +78,7 @@ def handle_form():
     try:
         editorial = int(form.getvalue('editorial'))
     except TypeError:
-       editorial = 0
+        editorial = 0
     try:
         customer = int(form.getvalue('customer'))
     except TypeError:
@@ -111,8 +111,6 @@ def handle_form():
         for image in amazon_review.amazon_get_image(ASIN):
             print image + "<p>"
                     
- 
-#print get_ASIN("etext2600")
                     
 print_cont()
 handle_form()
