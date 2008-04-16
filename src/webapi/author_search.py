@@ -96,7 +96,7 @@ def author_search(author, page):
     )
     AGAINST (
     '""" + MySQLdb.escape_string(author) + """' IN BOOLEAN MODE
-    ) LIMIT """ + start + ', ' + end + ';'
+    ) ;"""
     db = connect_to_database("amazon", "root", "gitkotwg0")    #replace with password
     cursor = db.cursor()
     cursor.execute(sqlquery)
