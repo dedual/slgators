@@ -87,8 +87,8 @@ def connect_to_database(databasename, usr, password):
 def subject_search(subject, page):
     if 0 > page:
         return {}
-    start = str((page - 1) * 10) 
-    end =  str(10)
+    start = (page - 1) * 10
+    end =  10
     sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `uuid`, `subject`
     FROM `book`
     WHERE MATCH (
@@ -96,14 +96,19 @@ def subject_search(subject, page):
     )
     AGAINST (
     '""" + MySQLdb.escape_string(subject) + """'
-    ) LIMIT """ + start + ', ' + end + ';'
+    ) ;"""
     db = connect_to_database("amazon", "root", "gitkotwg0")    #replace with password
     cursor = db.cursor()
     cursor.execute(sqlquery)
     result = cursor.fetchall()
     db.close()
     books = {}
-    for id, title, creator, contributor, uuid, subject in result:
+    if start > len(result):
+        start = result
+    for i in xrange(start, len(result)):
+        if (len(books) == end):
+            break
+        id, title, creator, contributor, uuid, subject =result[i]
         if books.has_key(id):
             if creator != 'NULL':
                 books[id]['creator'].append(creator)

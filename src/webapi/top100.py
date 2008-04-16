@@ -36,6 +36,7 @@ def handle_form():
         asin = amazon_search.get_ASIN(book_id)
         
         print books[book_id]['title'] + "|" + book_id + "|" +  books[book_id]["UUID"] + "|" + asin + "<p>"
+
         
 print_cont()
 handle_form()
