@@ -56,8 +56,8 @@ def __pg_search(page):
     etextids = get_top_books()
     if 0 > page:
         return {}
-    start = (page - 1) * 10 
-    end =  page * 10
+    start = (page - 1) * 12
+    end =  page * 12
     
     db = connect_to_database("amazon", "root", "gitkotwg0")     #replace with password
     cursor = db.cursor()
@@ -65,13 +65,13 @@ def __pg_search(page):
     
     for i in xrange(start, end):
         etextid = etextids[i]
-        sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`
+        sqlquery = """SELECT DISTINCT `id`, `title` , `creator` , `contributor`, `UUID`
                       FROM `book`
                       WHERE id = '""" + MySQLdb.escape_string(etextid) + """'
-                      GROUP BY id """
+                      GROUP BY id ;"""
         cursor.execute(sqlquery)
         result = cursor.fetchall()
-        for id, title, creator, contributor in result:
+        for id, title, creator, contributor, UUID in result:
             if books.has_key(id):
                 if creator:
                     books[id]['creator'].append(creator)
@@ -80,11 +80,12 @@ def __pg_search(page):
                 books[id]['creator'] = unique(books[id]['creator'])
                 books[id]['contributor'] = unique(books[id]['contributor'])
             else:
-                books[id] = {'title': title, 'creator' : [], 'contributor' : []}
+                books[id] = {'title': title, 'creator' : [], 'contributor' : [], "UUID" : UUID}
                 if creator:
                     books[id]['creator'].append(creator)
                 if contributor:
                     books[id]['contributor'].append(contributor)
+
     db.close()
         
     return books

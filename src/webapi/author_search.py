@@ -180,7 +180,6 @@ def handle_form():
     author = "+" + author
     page = int(form.getvalue('page'))
     books = author_search(author, page)
-    output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
         
