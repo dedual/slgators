@@ -1,5 +1,6 @@
 from pyaws import ecs
 import re
+import MySQLdb
 
 license_key = '0ZW74MMABE2VX9H26182'
 
@@ -36,25 +37,35 @@ def html2txt(s, hint = 'entity', code = 'ISO-8859-1'):
 
 
 def amazon_editorial_review(ASIN):
-    editorials = []
-    ecs.setLicenseKey(license_key)
-    result = ecs.ItemLookup(ASIN, ResponseGroup = "EditorialReview")
-    for review in result:
-        try:
-            for editorial_review in review.EditorialReviews:
-                editorials.append((editorial_review.Rating, html2txt(editorial_review.Summary), html2txt(editorial_review.Content)))
-        except TypeError:
-            editorials.append(html2txt(review.EditorialReviews.EditorialReview.Content))
-    return editorials
-        
+    try:
+        editorials = []
+        ecs.setLicenseKey(license_key)
+        result = ecs.ItemLookup(ASIN, ResponseGroup = "EditorialReview")
+        for review in result:
+            try:
+                for editorial_review in review.EditorialReviews:
+                    editorials.append((editorial_review.Rating, html2txt(editorial_review.Summary), html2txt(editorial_review.Content)))
+            except TypeError:
+                editorials.append(html2txt(review.EditorialReviews.EditorialReview.Content))
+        return editorials
+    except AttributeError:
+        return []
 
 def amazon_customer_review(ASIN):
-    reviews = []
-    ecs.setLicenseKey(license_key)
-    result = ecs.ItemLookup(ASIN, ResponseGroup = "Reviews")
-    for review in result[0].CustomerReviews.Review:
-        reviews.append((review.Rating, html2txt(review.Summary), html2txt(review.Content)))
-    return reviews
+    try:
+        reviews = []
+        ecs.setLicenseKey(license_key)
+        result = ecs.ItemLookup(ASIN, ResponseGroup = "Reviews")
+        try:
+            for review in result[0].CustomerReviews.Review:
+                reviews.append((review.Rating, html2txt(review.Summary), html2txt(review.Content)))
+        except AttributeError:
+            return []
+        return reviews
+    except AttributeError:
+        return []
+    except ecs.MinimumParameterRequirement:
+        return []
 
 def amazon_get_image(ASIN, size="LargeImage"):
     images = []
@@ -70,14 +81,17 @@ def amazon_get_image(ASIN, size="LargeImage"):
         
 
 def amazon_similarities(ASIN):
-    similarities = []
-    ecs.setLicenseKey(license_key)
-    result = ecs.ItemLookup(ASIN, ResponseGroup = "Similarities")
-    for item in result:
-        for product in item.SimilarProducts.SimilarProduct:
-            similarities.append((product.Title, product.ASIN))
-    return similarities
-
+    try:
+        similarities = []
+        ecs.setLicenseKey(license_key)
+        result = ecs.ItemLookup(ASIN, ResponseGroup = "Similarities")
+        for item in result:
+            for product in item.SimilarProducts.SimilarProduct:
+                similarities.append((product.Title, product.ASIN))
+        return similarities
+    except AttributeError:
+        return []
+    
 def avarage_rating(ASIN):
     if ASIN:
         ecs.setLicenseKey(license_key)
@@ -90,3 +104,4 @@ def avarage_rating(ASIN):
             return "None"
     else:
         return "None"
+    
