@@ -123,7 +123,7 @@ def pg_search(title, page):
             if uuid != 'NULL':
                 books[id]['UUID'].append(uuid)
             else:
-                books[id]['UUID'].append("None")
+                books[id]['UUID'].append(uuid)
                 
             if subject != 'NULL':
                 books[id]['subject'].append(subject)
@@ -149,7 +149,7 @@ def pg_search(title, page):
             if uuid != 'NULL':
                 books[id]['UUID'].append(uuid)
             else:
-                books[id]['UUID'].append("None")
+                books[id]['UUID'].append(uuid)
                 
             if subject != 'NULL':
                 books[id]['subject'].append(subject)
