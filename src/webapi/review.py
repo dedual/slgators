@@ -92,7 +92,6 @@ def add_new_lines(string, nchars = 92):
             
 def getlines(f, start, end, nchars=92):
     string = add_new_lines(f)
-    print string
     f = string.split("\n")
     lines = ""
     pad = ''
@@ -118,7 +117,7 @@ def handle_form():
     page = form.getvalue("page")
     images = form.getvalue("images")
     if(start and end):
-        start = int(start)
+        start = int(start) - 1
         end = int(end)
     elif(page):
         page = int(page)
