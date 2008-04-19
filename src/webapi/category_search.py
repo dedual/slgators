@@ -187,8 +187,7 @@ def handle_form():
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
         
-        print book_id + "|" +  books[book_id]['title'] + "|",
-        print "#".join(books[book_id]["creator"]) + "|",
+        print book_id + "|" +  books[book_id]['title'] + "|" + "#".join(books[book_id]["creator"]) + "|",
         print "#".join(books[book_id]["contributor"]) + "|",
         print "#".join(books[book_id]["subject"]) + "|" ,
         print amazon_review.avarage_rating(asin) + "|",
