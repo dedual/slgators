@@ -137,18 +137,21 @@ def __pg_search(page):
                       WHERE id = '""" + MySQLdb.escape_string(etextid) + "';"
         cursor.execute(sqlquery)
         result = cursor.fetchall()
-        books[etextid] = {'title': None, 'creator' : [], 'contributor' : [], "UUID" : "None"}
-        for id, title, creator, contributor, UUID in result:
-            
+        books[etextid] = {'title': "Book not available", 'creator' : [], 'contributor' : [], "UUID" : "1f62ad03-0350-452f-f1e8-80c4889e57ce"}
+        for id, title, creator, contributor, UUID in result:            
             if books[id]:
-                if creator:
+                if creator != 'NULL':
                     books[id]['creator'].append(creator)
-                if contributor:
+                else:
+                    books[id]['creator'].append("None")
+                if contributor != 'NULL':
                     books[id]['contributor'].append(contributor)
+                else:
+                    books[id]['contributor'].append("None")                    
                 books[id]['creator'] = unique(books[id]['creator'])
                 books[id]['contributor'] = unique(books[id]['contributor'])
-                books["title"] = title
-                books["UUID"] = UUID
+                books[id]["title"] = title
+                books[id]["UUID"] = UUID
             else:
                 books[id] = {'title': title, 'creator' : [], 'contributor' : [], "UUID" : UUID}
                 if creator:
@@ -165,7 +168,5 @@ def get_top_100_books(page):
     books = __pg_search(page)
     return books
 
-
-__pg_search(3)
     
         
