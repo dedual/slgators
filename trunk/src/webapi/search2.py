@@ -187,6 +187,7 @@ def handle_form():
         asin = amazon_search.get_ASIN(book_id)
         
         print book_id + "|" +  books[book_id]['title'] + "|",
+        print "#".join(books[book_id]["UUID"]) + "|",
         print "#".join(books[book_id]["creator"]) + "|",
         print "#".join(books[book_id]["contributor"]) + "|",
         print "#".join(books[book_id]["subject"]) + "|" ,
@@ -200,4 +201,4 @@ handle_form()
 
 
 
-
+book_id|title|UUID|creator|contibutor|subject|rating|ASIN
