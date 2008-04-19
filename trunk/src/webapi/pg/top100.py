@@ -120,9 +120,7 @@ def connect_to_database(databasename, usr, password):
 
 
 def __pg_search(start, end):
-    etextids = get_top_books()
-    if 0 > page:
-        return {}
+    etextids = get_top_books()    
         
     if len(etextids) < end:
         end = len(etextids)
