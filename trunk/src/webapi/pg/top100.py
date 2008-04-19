@@ -146,6 +146,7 @@ def __pg_search(page):
         result = cursor.fetchall()
         books[etextid] = {'title': "Book not available", 'creator' : [], 'contributor' : [], "UUID" : "1f62ad03-0350-452f-f1e8-80c4889e57ce"}
         for id, title, creator, contributor, UUID in result:            
+            uuid = uuid.strip()
             if books[id]:
                 if creator != 'NULL':
                     books[id]['creator'].append(creator)

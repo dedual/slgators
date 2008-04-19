@@ -107,6 +107,7 @@ def author_search(author, page):
         if (len(books) == end):
             break
         id, title, creator, contributor, uuid, subject =result[i]
+        uuid = uuid.strip()
         if books.has_key(id):
             if creator != 'NULL':
                 books[id]['creator'].append(creator)
