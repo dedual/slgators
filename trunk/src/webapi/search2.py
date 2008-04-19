@@ -200,5 +200,3 @@ print_cont()
 handle_form()
 
 
-
-book_id|title|UUID|creator|contibutor|subject|rating|ASIN
