@@ -119,15 +119,11 @@ def connect_to_database(databasename, usr, password):
     return db
 
 
-def __pg_search(page):
+def __pg_search(start, end):
     etextids = get_top_books()
     if 0 > page:
         return {}
-
         
-    start = (page - 1) * 12
-    end =  page * 12
-    
     if len(etextids) < end:
         end = len(etextids)
     if len(etextids) < start:
@@ -172,8 +168,8 @@ def __pg_search(page):
     return books
 
 
-def get_top_100_books(page):
-    books = __pg_search(page)
+def get_top_100_books(start, end):
+    books = __pg_search(start, end)
     return books
 
     
