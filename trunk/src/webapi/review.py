@@ -56,6 +56,7 @@ def get_ASIN(etextid):
                 print "KEYERROR" 
         else:
             try:
+                ecs.setLicenseKey('0ZW74MMABE2VX9H26182')
                 books = ecs.ItemSearch(title,SearchIndex='Books', Sort='relevancerank')
                 return books[0].ASIN
             except KeyError:
