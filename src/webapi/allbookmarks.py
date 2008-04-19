@@ -39,7 +39,7 @@ def handle_form():
             print "<P>"      
     else:
         for row in user_info.fetch_all_bookmarks(fname, lname, etextid):
-            str_row = [str(x) for x in row]
+            str_row = [str(x).strip() for x in row]
             print "|".join(str_row)
             print "<P>"
 
