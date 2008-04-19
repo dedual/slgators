@@ -25,12 +25,12 @@ def print_title():
     
 def handle_form():
     form = cgi.FieldStorage()
-    page = 0
     try:
-        page = int(form.getvalue('page'))
+        start = int(form.getvalue('start'))
+        end = int(form.getvalue("end"))
     except TypeError, e:
         print e
-    books = top100.get_top_100_books(int(page))
+    books = top100.get_top_100_books(start, end)
     output = ""
     for book_id in  books.keys():
         asin = amazon_search.get_ASIN(book_id)
