@@ -95,6 +95,10 @@ def getlines(f, start, end, nchars=92):
     f = string.split("\n")
     lines = ""
     pad = ''
+    if end > len(f):
+        end = len(f) -1
+    if start > len(f):
+        end = len(f) - 1
     for i in range(start, end+1):
         pad = ''
         line = f[i].strip()
