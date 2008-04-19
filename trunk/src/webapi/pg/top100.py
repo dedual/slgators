@@ -137,7 +137,7 @@ def __pg_search(page):
                       WHERE id = '""" + MySQLdb.escape_string(etextid) + "';"
         cursor.execute(sqlquery)
         result = cursor.fetchall()
-        books[etextid] = {'title': None, 'creator' : [], 'contributor' : [], "UUID" : None}
+        books[etextid] = {'title': None, 'creator' : [], 'contributor' : [], "UUID" : "None"}
         for id, title, creator, contributor, UUID in result:
             
             if books[id]:
@@ -147,6 +147,8 @@ def __pg_search(page):
                     books[id]['contributor'].append(contributor)
                 books[id]['creator'] = unique(books[id]['creator'])
                 books[id]['contributor'] = unique(books[id]['contributor'])
+                books["title"] = title
+                books["UUID"] = UUID
             else:
                 books[id] = {'title': title, 'creator' : [], 'contributor' : [], "UUID" : UUID}
                 if creator:
