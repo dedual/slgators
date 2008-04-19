@@ -40,5 +40,5 @@ def handle_form():
         print books[book_id]['title'] + "|" + book_id + "|" +  books[book_id]["UUID"] + "|" + asin + "<p>"
 
         
-#print_cont()
+print_cont()
 handle_form()
