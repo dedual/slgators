@@ -123,9 +123,16 @@ def __pg_search(page):
     etextids = get_top_books()
     if 0 > page:
         return {}
+
+        
     start = (page - 1) * 12
     end =  page * 12
     
+    if len(etextids) < end:
+        end = len(etextids)
+    if len(etextids) < start:
+        start = len(etextids)
+        
     db = connect_to_database("amazon", "root", "gitkotwg0")     #replace with password
     cursor = db.cursor()
     books = {}
