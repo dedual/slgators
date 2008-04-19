@@ -76,21 +76,7 @@ def add_new_lines(string, nchars = 92):
             temp_line = ""
         temp_line += " " + word
     return line
-    #lenght = len(string)
-    #insertion_point = []
-    #j = 0
-    #for i in xrange(1, len(string)):
-        #if i % nchars == 0:
-            #k = j
-            #j = i
-            #while (string[j] != unicode(" ") and string[j] != unicode("\n") and string[j] != "\n" and string[j] != " "):
-                #a = string[j]
-                #j -= 1
-            #insertion_point.append([k,j])
-    #result = "\n".join([string[point[0]:point[1]] for point  in insertion_point])       
-    #result += string[j:]
-    #return result
-            
+
 def getlines(f, start, end, nchars=92):
     string = add_new_lines(f)
     f = string.split("\n")
@@ -121,6 +107,7 @@ def handle_form():
     end = form.getvalue("end")
     page = form.getvalue("page")
     images = form.getvalue("images")
+    page = 1
     if(start and end):
         start = int(start) - 1
         end = int(end)
@@ -129,7 +116,9 @@ def handle_form():
         start = (page - 1)* 58
         end = ((page - 1) * 58 +1) + 57
         
-    
+    bookid = "etext24439"
+    customer = 1
+
     if ASIN:
         pass
     elif bookid:
@@ -151,22 +140,38 @@ def handle_form():
         images = int(form.getvalue('images'))
     except TypeError:
         images = None
+    customer = 1
     if editorial:
-        result = ""
-        for review in amazon_review.amazon_editorial_review(ASIN):
-            source, content = review
-            result += "Source: " + source + "\n"
-            result += content + "\n"
+        if(ASIN == None):
+            print "None"
+        else:
+            result = ""
+            for review in amazon_review.amazon_editorial_review(ASIN):
+                source, content = review
+                result += "Source: " + source + "\n"
+                result += content + "\n"
+            result = result.replace("<", "")
+            result = result.replace(">", "")
+            if result == "":
+                print "None"
+            else:
+                print getlines(result, start, end)
     elif customer:
-        result = ""
-        for review in amazon_review.amazon_customer_review(ASIN):
-            rating, summary, content = review
-            result += "Rating: " + rating + "\n"
-            result += "Summary: " + summary + "\n"
-            result += "Content<\n>" + content + "\n"
-        result = result.replace("<", "")
-        result = result.replace(">", "")
-        print getlines(result, start, end)
+        if (ASIN == None):
+            print "None"
+        else:
+            result = ""
+            for review in amazon_review.amazon_customer_review(ASIN):
+                rating, summary, content = review
+                result += "Rating: " + rating + "\n"
+                result += "Summary: " + summary + "\n"
+                result += "Content<\n>" + content + "\n"
+            result = result.replace("<", "")
+            result = result.replace(">", "")
+            if result == "":
+                print "None"
+            else:
+                print getlines(result, start, end)
     elif similarities:
         for similar in amazon_review.amazon_similarities(ASIN):
             title, id = similar
