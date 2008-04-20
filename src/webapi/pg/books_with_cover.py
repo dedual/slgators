@@ -135,5 +135,3 @@ COLLATE latin1_swedish_ci;"""
 def get_random_book(start, end):
     books = __random_w_cover(start, end)
     return books
-
-print get_random_book(1,10)
