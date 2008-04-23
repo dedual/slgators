@@ -1,5 +1,5 @@
 import MySQLdb
-
+import os
 def connect_to_database(databasename, usr, password):
     db = MySQLdb.connect(host="localhost", user=usr, passwd=password, db=databasename)
     return db
@@ -18,9 +18,10 @@ def csv2List(filename):
 
 uuid_lst = csv2List("uuids.csv")
 for id, uuid in uuid_lst:
-    sql_query = """UPDATE `amazon`.`book` SET `UUID` = '""" + uuid + """' WHERE book.id = '""" + id + """' ;"""
-    db = connect_to_database("amazon", "root", "gitkotwg0")
-    cursor = db.cursor()
-    cursor.execute(sql_query)
+    os.system("rm " + id + ".jpg")
+    #sql_query = """UPDATE `amazon`.`book` SET `UUID` = '""" + uuid + """' WHERE book.id = '""" + id + """' ;"""
+    #db = connect_to_database("amazon", "root", "gitkotwg0")
+    #cursor = db.cursor()
+    #cursor.execute(sql_query)
 
     
