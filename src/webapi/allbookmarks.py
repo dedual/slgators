@@ -34,7 +34,7 @@ def handle_form():
     if page != None:
         result = ""
         for row in user_info.fetch_all_bookmarks(fname, lname, etextid, int(page)):
-            str_row = [str(x) for x in row]
+            str_row = [str(x).strip() for x in row]
             print "|".join(str_row)
             print "<P>"      
     else:

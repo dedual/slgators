@@ -25,14 +25,14 @@ def fetch_user_bookmarks(fname, lname, bookid = None):
     cursor = db.cursor()
     sql_query = ""
     if bookid:
-        sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+        sql_query = ("""SELECT DISTINCT book.id, bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
         FROM book, bookmark
         WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
         AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
         AND bookmark.bookid = '""" + MySQLdb.escape_string(bookid) + """'
         AND bookmark.bookid = book.id;""")
     else:
-        sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+        sql_query = ("""SELECT DISTINCT book.id, bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
         FROM book, bookmark
         WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
         AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
@@ -51,14 +51,14 @@ def fetch_all_bookmarks(fname, lname, bookid = None, page = None):
         cursor = db.cursor()
         sql_query = ""
         if bookid:
-            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            sql_query = ("""SELECT DISTINCT book.id, bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
             FROM book, bookmark
             WHERE bookmark.fname = '""" + MySQLdb.escape_string(fname) + """'
             AND bookmark.lname = '"""   + MySQLdb.escape_string(lname) + """'
             AND bookmark.bookid = '""" + MySQLdb.escape_string(bookid) + """' 
             AND bookmark.bookid = book.id LIMIT """ + MySQLdb.escape_string(str(start)) + """,""" + MySQLdb.escape_string(str(end)) + """ ;""")
         else:
-            sql_query = ("""SELECT DISTINCT bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
+            sql_query = ("""SELECT DISTINCT book.id, bookmark.id, bookmark.name, book.title, book.UUID, bookmark.page
             FROM book, bookmark
             WHERE bookmark.fname = '""" + fname + """'
             AND bookmark.lname = '"""   + lname + """'

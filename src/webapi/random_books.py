@@ -30,6 +30,8 @@ def handle_form():
         end = int(form.getvalue("end"))
     except TypeError, e:
         print e
+    start = 0
+    end = 100
     books = books_with_cover.get_random_book(start, end)
     output = ""
     for book_id in  books.keys():
